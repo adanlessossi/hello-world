@@ -56,12 +56,10 @@ git push -u origin master
 
 ===================================================================
 
-ERROR: no protocol: ec2-18-194-235-225.eu-central-1.compute.amazonaws.com
-java.net.MalformedURLException: no protocol: ec2-18-194-235-225.eu-central-1.compute.amazonaws.com
+The push refers to repository [ec2-18-194-235-225.eu-central-1.compute.amazonaws.com/hello-world]
+Get https://ec2-18-194-235-225.eu-central-1.compute.amazonaws.com/v2/: dial tcp 10.0.0.215:443: getsockopt: connection refused
+Build step 'Docker Build and Publish' marked build as failure
 
-org.jenkinsci.plugins.docker.commons.credentials.DockerRegistryEndpoint.getEffectiveUrl(DockerRegistryEndpoint.java:136)
-	at org.jenkinsci.plugins.docker.commons.credentials.DockerRegistryEndpoint.imageName(DockerRegistryEndpoint.java:238)
-	at com.cloudbees.dockerpublish.DockerBuilder.getRepo(DockerBuilder.java:252)
 
 
 
