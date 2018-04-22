@@ -1,0 +1,55 @@
+======================== Create the Cluster =====================================
+aws cloudformation create-stack --template-body file://ecs-cluster.template --stack-name EcsClusterStack --capabilities CAPABILITY_IAM --tags Key=Name,Value=ECS --region eu-central-1 --parameters ParameterKey=KeyName,ParameterValue=<key_name> ParameterKey=EcsCluster,ParameterValue=getting-started ParameterKey=AsgMaxSize,ParameterValue=2
+
+======================== Create the Jenkins Server =================================
+aws cloudformation create-stack --template-body file://ecs-jenkins-demo.template --stack-name JenkinsStack --capabilities CAPABILITY_IAM --tags Key=Name,Value=Jenkins --region eu-central-1 --parameters ParameterKey=EcsStackName,ParameterValue=EcsClusterStack
+
+======================== Retrieve the public host name of the Jenkins server =====================
+aws ec2 describe-instances --filters "Name=tag-value","Values=JenkinsStack" --region eu-central-1 | jq .Reservations[].Instances[].PublicDnsName
+
+--> ec2-18-194-235-225.eu-central-1.compute.amazonaws.com
+
+========================= SSH into the instance, and =================================
+==============  then copy the temp password from /var/lib/jenkins/secrets/initialAdminPassword ========0
+ssh -i CICDKeyPair ec2-user@ec2-18-194-235-225.eu-central-1.compute.amazonaws.com
+
+-->sudo cat /var/lib/jenkins/secrets/initialAdminPassword --> 0ef7d14dc6ad49cf96ea5f08e9f71acd
+-->logout
+
+========================= Create an Amazon ECR registry ================================
+aws ecr create-repository --repository-name hello-world --region eu-central-1
+--> "repositoryArn": "arn:aws:ecr:eu-central-1:780462955238:repository/hello-world",
+--> "repositoryUri": "780462955238.dkr.ecr.eu-central-1.amazonaws.com/hello-world"
+
+============================ Login to the registry ========================
+aws ecr get-login --no-include-email | cmd
+
+============================= Step 4: Configure Jenkins First Run ========================
+1. Paste the public host name of the Jenkins server into a browser.
+----> ec2-18-194-235-225.eu-central-1.compute.amazonaws.com
+2. Paste the password
+----> 0ef7d14dc6ad49cf96ea5f08e9f71acd
+3. Choose Install suggested plugins.
+4. Create your first admin user
+5. Save and finish
+
+============================== Install Cloudbees Docker build and publish plugin ====================
+1. Go to Manage Jenkins - Manage Plugins -->available
+2. Install Cloudbees Docker build and publish plugin & Amazon ECR plugin
+3. Restart after installation
+
+================================ Create and Import SSH Keys for GitHub =======
+1.
+ssh-keygen -t rsa -b 4096 -C your_email@company.com
+2.
+Go to GitHub -> Settings -> SSH and GPG keys -> New SSH key -> Add SSH key
+
+git commit -m "First commit"
+
+git remote add origin 'https://github.com/<your_repo>.git'
+
+git push -u origin master
+
+
+
+
