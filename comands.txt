@@ -43,7 +43,7 @@ aws ecr get-login --no-include-email | cmd
 
 ================================ Create and Import SSH Keys for GitHub =======
 1.
-ssh-keygen -t rsa -b 4096 -C your_email@company.com
+ssh-keygen -t rsa -b 4096 -C adanlessossi@hotmail.com
 2.
 Go to GitHub -> Settings -> SSH and GPG keys -> New SSH key -> Add SSH key
 
