@@ -24,6 +24,7 @@ aws ecr create-repository --repository-name hello-world --region eu-central-1
 ============================ Login to the registry ========================
 aws ecr get-login --no-include-email | cmd
 
+aws ecr get-login --no-include-email
 ============================= Step 4: Configure Jenkins First Run ========================
 1. Paste the public host name of the Jenkins server into a browser.
 ----> ec2-18-194-235-225.eu-central-1.compute.amazonaws.com
