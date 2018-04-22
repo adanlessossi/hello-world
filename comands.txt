@@ -49,7 +49,7 @@ Go to GitHub -> Settings -> SSH and GPG keys -> New SSH key -> Add SSH key
 
 git commit -m "First commit"
 
-git remote add origin 'https://github.com/<your_repo>.git'
+git remote add origin 'https://github.com/adanlessossi/hello-world.git'
 
 git push -u origin master
 
