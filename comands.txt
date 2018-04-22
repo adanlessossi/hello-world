@@ -27,16 +27,19 @@ aws ecr get-login --no-include-email | cmd
 ============================= Step 4: Configure Jenkins First Run ========================
 1. Paste the public host name of the Jenkins server into a browser.
 ----> ec2-18-194-235-225.eu-central-1.compute.amazonaws.com
+
 2. Paste the password
 ----> 0ef7d14dc6ad49cf96ea5f08e9f71acd
 3. Choose Install suggested plugins.
 4. Create your first admin user
 5. Save and finish
 
+
 ============================== Install Cloudbees Docker build and publish plugin ====================
 1. Go to Manage Jenkins - Manage Plugins -->available
 2. Install Cloudbees Docker build and publish plugin & Amazon ECR plugin
 3. Restart after installation
+
 
 ================================ Create and Import SSH Keys for GitHub =======
 1.
