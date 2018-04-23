@@ -54,12 +54,34 @@ git remote add origin 'https://github.com/adanlessossi/hello-world.git'
 
 git push -u origin master
 
-===================================================================
+======================= Enable webhooks on your repository so Jenkins is notified when files are pushed ==
+1. Browse to your GitHub repository -> Settings -> Integration Services 
+2. Add Service ->"Jenkins (github plugin)"
+3. In Jenkins URL type in the Jenkins Server URL prepended by your Jenkins user name and password:
+     http://jadmin:Kathmandu6$@ec2-18-194-235-225.eu-central-1.compute.amazonaws.com/github-webhook/
+
+4. Update the service
+
+================= Configure Jenkins ==============================
+1. Manage Jenkins -> Choose New Item -> freestyle project -> OK
+2. Under the source code management heading, choose git
+3. In the repository URL field: https://github.com/adanlessossi/hello-world.git
+4. In Credentials, choose the GitHub credentials
+5. Under build triggers, choose Build when a change is pushed to GitHub
+6. Add a build step -> Execute shell
+    #!/bin/bash
+    DOCKER_LOGIN=`aws ecr get-login --no-include-email --region eu-central-1`
+    ${DOCKER_LOGIN}
+7. Choose Add a build step, and then choose Docker Build and Publish
+   Repository name: hello-world
+   Docker registry URL: https://780462955238.dkr.ecr.eu-central-1.amazonaws.com/hello-world
+   Tag: v_$BUILD_NUMBER
+8.  Add a build step -> Execute shell
 #!/bin/bash
 #Constants
 
 REGION=eu-central-1
-REPOSITORY_NAME=hello-world
+REPOSITORY_NAME=getting-started
 CLUSTER=EcsCluster
 FAMILY=`sed -n 's/.*"family": "\(.*\)",/\1/p' taskdef.json`
 NAME=`sed -n 's/.*"name": "\(.*\)",/\1/p' taskdef.json`
@@ -88,7 +110,19 @@ else
   echo "entered new service"
   aws ecs create-service --service-name ${SERVICE_NAME} --desired-count 1 --task-definition ${FAMILY} --cluster ${CLUSTER} --region ${REGION}
 fi
-=================================================================================================
+9. Save
+
+================================== Check it out =============================================
+1. Log in to the AWS Management Console
+2. Under Compute, choose EC2 Container Service.
+3. Choose the name of the cluster you created earlier. For example, getting-started
+4. On the Services tab, choose the name of the service
+5. On the Task tab, choose the RUNNING task
+6. Under Containers, click the twisty next to the container name.
+7. Under Network bindings, choose the IP address in the External Link column
+    a. You should see the app deployed!
+    b. Every commit will trigger the container service
+
 
 
 
